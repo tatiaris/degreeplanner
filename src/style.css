@@ -1,0 +1,29 @@
+:root {
+  --primary-color-light: #1ba5d3;
+  --color-light: white;
+  --color-dark: black;
+}
+
+*::after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  margin: 0px;
+}
+
+tr td a:visited {
+    color: #ccd0d5 !important;
+}
+
+tr td a:hover, a:active {
+    color: #ccd0d5 !important;
+}
+
+tr td a {
+    color: #ccd0d5 !important;
+}
