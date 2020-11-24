@@ -9,17 +9,16 @@ import { Navbar, Nav, Form, FormControl, Button, NavDropdown } from "react-boots
 export const Mnavbar: React.FC<MnavbarProps> = (props) => {
   return (
     <>
-      <Navbar collapseOnSelect expand="lg" bg={props.theme} variant={props.theme}>
-        <Navbar.Brand href="/">DP</Navbar.Brand>
+      <Navbar style={{ borderBottom: "1px solid #454d55", height: "5vh" }} collapseOnSelect expand="lg" bg={props.theme} variant={props.theme}>
+        <Navbar.Brand href="/">Aggie Degree Planner</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
-            <Nav.Link href="/about">About</Nav.Link>
-            <Nav.Link href="/contact">Contact Us</Nav.Link>
+            {/* <Nav.Link href="/about">About</Nav.Link> */}
           </Nav>
           <NavDropdown.Divider />
           <Nav>
-            <Nav.Link href="/entry">Entry</Nav.Link>
+            <Nav.Link href="/tutorial">Tutorial</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

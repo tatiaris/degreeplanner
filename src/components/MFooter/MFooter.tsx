@@ -7,11 +7,11 @@ import { Container, Row, Col, Button, Table } from "react-bootstrap";
 export const MFooter: React.FC = () => {
   return (
     <>
-      <footer style={{ color: "white" }}>
-        <Container fluid style={{ padding: "2em 1em", background: "#343a40" }}>
+      <footer style={{ background: "#343a40", color: "white", height: "5vh", borderTop: "1px solid #40484f", display: "flex", justifyContent: "center", alignItems: "center"  }}>
+        <Container fluid style={{  }}>
           <Row className="justify-content-md-center">
-            <Col sm="2">
-              <span>DP by Rishabh Tatia &copy; 2020-2021</span>
+            <Col sm="auto">
+              <span>Aggie Degree Planner &copy; 2020-2021 by <a href="https://www.tatiaris.com">Rishabh Tatia</a></span>
             </Col>
           </Row>
         </Container>

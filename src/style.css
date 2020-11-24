@@ -27,3 +27,17 @@ tr td a:hover, a:active {
 tr td a {
     color: #ccd0d5 !important;
 }
+span a {
+    color: white !important;
+}
+
+.modal-content {
+    border-radius: 0px;
+}
+
+.table thead th {
+	border-bottom: 1px;
+}
+.progress {
+    border-radius: 0px;
+}
