@@ -130,7 +130,7 @@ const Course = (): React.ReactNode => {
   };
 
   const loadCourses = async () => {
-    const res = await fetch(`http://localhost:3000/api/${urlCourse}`);
+    const res = await fetch(`/api/${urlCourse}`);
     const allCourses = await res.json();
     setCourses(allCourses.courses);
     setCourseCategories(allCourses.categories);
