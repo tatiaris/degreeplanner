@@ -10,7 +10,7 @@ export const Mheader: React.FC<MheaderProps> = (props) => {
   return (
     <div>
       <Head>
-        <title>DP | {props.title}</title>
+        <title>ADP | {props.title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
     </div>

@@ -7,65 +7,10 @@ import { CollapsibleBtns } from "../components/CollapsibleBtns";
 import { CourseColumn } from "../components/CourseColumn";
 import { CompletionColumn } from "../components/CompletionColumn";
 
-const allCourses = [
-  {
-    id: 'tamu-engr-102',
-    name: 'ENGR - 102',
-    department: "ENGR",
-    course_num: 102,
-    credit_hours: 3,
-    type: 'Major Coursework',
-    location: 'Major Coursework'
-  },
-  {
-    id: 'tamu-chem-107',
-    name: 'CHEM - 107',
-    department: "CHEM",
-    course_num: 107,
-    credit_hours: 3,
-    type: 'Major Coursework',
-    location: 'Major Coursework'
-  },
-  {
-    id: 'tamu-chem-117',
-    name: 'CHEM - 117',
-    department: "CHEM",
-    course_num: 117,
-    credit_hours: 1,
-    type: 'Major Coursework',
-    location: 'Major Coursework'
-  },
-  {
-    id: 'tamu-math-152',
-    name: 'MATH - 152',
-    department: "MATH",
-    course_num: 152,
-    credit_hours: 3,
-    type: 'Major Coursework',
-    location: 'Major Coursework'
-  },
-  {
-    id: 'tamu-csce-121',
-    name: 'CSCE - 121',
-    department: "CSCE",
-    course_num: 121,
-    credit_hours: 3,
-    type: 'Supporting Coursework',
-    location: 'Supporting Coursework'
-  },
-  {
-    id: 'tamu-csce-222',
-    name: 'CSCE - 222',
-    department: "CSCE",
-    course_num: 222,
-    credit_hours: 3,
-    type: 'Supporting Coursework',
-    location: 'Supporting Coursework'
-  }
-]
 
 const Home = (): React.ReactNode => {
-  const [courses, setCourses] = useState(allCourses);
+  const [courses, setCourses] = useState([]);
+  const [courseCategories, setCourseCategories] = useState({});
   const [plannedCourses, setPlannedCourses] = useState([]);
   const [semesters, setSemesters] = useState([
     {name: "Pre-acquired credits", courses: []}, {name: "1st Semester", courses: []}
@@ -116,7 +61,8 @@ const Home = (): React.ReactNode => {
   const handleMoveCourse = (e) => {
     let prevLocation = "";
     let chosenCourseObject;
-    let allCoursesCopy = allCourses.map((c, i) => {
+    // bug maybe here
+    let allCoursesCopy = courses.map((c, i) => {
       if (c.name == chosenCourse) {
         prevLocation = c.location;
         c.location = chosenSemester;
@@ -172,6 +118,17 @@ const Home = (): React.ReactNode => {
     setSemesters(updatedSemesterList);
   }
 
+  const loadCourses = async () => {
+    const res = await fetch(`/api/csce`)
+    const allCourses = await res.json()
+    setCourses(allCourses.courses)
+    setCourseCategories(allCourses.categories)
+  }
+  
+  useEffect(() => {
+    loadCourses();
+  }, [])
+
   let semesterOptions = [];
   let semestersComponent = [];
   let tableComponent = (<></>);
@@ -182,8 +139,10 @@ const Home = (): React.ReactNode => {
         <option key={`semester-option-${sem.name}`} style={{ textAlign: "center", fontSize: "1.5em", borderBottom: "1px solid white" }}>{sem.name}</option>
     ))
     semestersComponent = semesters.map((sem, i) => {
-      coursesComponent = sem.courses.map((c, j) => (
-          <tr key={`course-row-${c.id}`}>
+      let total_credit_hours = 0;
+      coursesComponent = sem.courses.map((c, j) => {
+          total_credit_hours += c.credit_hours;
+          return (<tr key={`course-row-${c.id}`}>
             <td>{j+1}</td>
             <td>{c.department}</td>
             <td>{c.course_num}</td>
@@ -191,15 +150,15 @@ const Home = (): React.ReactNode => {
             <td style={{ padding: "0px" }}>
               <Button key={`course-btn-${c.id}`} onClick={handleTableCourseClick} name={c.name} variant="danger" style={{ width: "100%", height: "50px", borderRadius: "0px" }}>&#8942;</Button>
             </td>
-          </tr>
-      ));
+          </tr>)
+      });
       tableComponent = (
-          <Table key={`course-table-${sem.name}`} striped hover variant="dark" style={{ marginTop: "1em", marginBottom: "3em", border: "1px solid #454d55" }}>
+          <Table key={`course-table-${sem.name}`}  hover variant="dark" style={{ marginTop: "1em", marginBottom: "3em", background: "#2a2e33" }}>
             <thead>
-              <tr style={{ background: "#282c31" }}>
-                <th style={{ border: "none" }} colSpan={2}>{sem.name}</th>
+              <tr style={{ background: "#1c1f22" }}>
+                <th style={{ border: "none", width: "200px" }} colSpan={2}>{sem.name}</th>
                 <th style={{ border: "none" }}>Courses Planned: {sem.courses.length}</th>
-                <th style={{ border: "none" }}>Total Credit Hours: 0</th>
+                <th style={{ border: "none" }}>Total Credit Hours: {total_credit_hours}</th>
                 <th></th>
               </tr>
               <tr>
@@ -223,15 +182,18 @@ const Home = (): React.ReactNode => {
     <>
       <Mheader title={"Home"} />
       <Mnavbar theme={"dark"} />
-      <Row style={{ margin: "0px", height: "calc(90vh)" }}>
-        <CourseColumn handleCourseClick={handleCourseClick} courseList={courses} opposite={false}/>
-        <Col sm="8" style={{ background: "#343a40", paddingTop: "1em", overflow: "scroll", height: "100%" }}>
+      <Row id="page_container" style={{ margin: "0px" }}>
+        <CourseColumn categories={courseCategories} handleCourseClick={handleCourseClick} courseList={courses} opposite={false}/>
+        <Col sm="7" style={{ background: "#343a40", paddingTop: "1em", overflow: "scroll", height: "100%" }}>
           <Row style={{ margin: "0px", display: "flex", justifyContent: "right" }}>
-            <Button variant="success" style={{ borderRadius: "0px" }} onClick={activateAddSemesterModal}>Add/Remove Semesters</Button>
+            <Col sm="9" style={{ padding: "0", fontSize: "2em", color: "white", fontWeight: "bold" }}>Computer Science</Col>
+            <Col sm="3" style={{ padding: "0px", display: "flex", justifyContent: "right" }}>
+              <Button variant="success" style={{ borderRadius: "0px" }} onClick={activateAddSemesterModal}>Add/Remove Semesters</Button>
+            </Col>
           </Row>
           {semestersComponent}
         </Col>
-        <CompletionColumn handleCourseClick={handleCourseClick} courseList={plannedCourses} opposite={true}/>
+        <CompletionColumn categories={courseCategories} handleCourseClick={handleCourseClick} courseList={plannedCourses} opposite={true}/>
       </Row>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

@@ -21,9 +21,11 @@ export interface CourseColumnProps {
     courseList: any;
     handleCourseClick: any;
     opposite: boolean;
+    categories: any;
 }
 export interface CompletionColumnProps {
     courseList: any;
     handleCourseClick: any;
     opposite: boolean;
+    categories: any;
 }

@@ -38,20 +38,22 @@ export const CollapsibleBtns: React.FC<CollapsibleBtnsProps> = (props) => {
 
   let progress = 0;
   let progressComponent = (<></>);
+  let progressCount = (<></>);
   if (props.reqAmount > 0) {
     for (let i = 0; i < options.length; i++){
       if (options[i].type == props.courseType) {
         progress += options[i].credit_hours;
       }
     }
+    progressCount = <>({progress}/{props.reqAmount})</>
     progress = Math.round(progress*100/props.reqAmount);
-    progressComponent = (<ProgressBar striped variant="success" now={progress} label={`${progress}%`} />);
+    progressComponent = (<ProgressBar striped variant="success" style={{ height: "2em" }} now={progress} label={`${progress}%`} />);
   }
 
   return (
     <>
       <Button style={{ width: "100%", borderRadius: "0px", textAlign: "left" }} variant={bootVariant} onClick={handleCollapseBtn}>
-        {props.courseType}
+        {props.courseType} {progressCount}
         <span style={{ float: "right", fontWeight: "bold" }}>{collapseSymbol}</span>
       </Button>
       {progressComponent}
