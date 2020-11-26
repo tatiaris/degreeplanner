@@ -1,6 +1,6 @@
 import nextConnect from "next-connect";
 import middleware from "../../../middleware/database";
-import cheerio from "cheerio";
+const { BASE_URL } = process.env
 
 const handler = nextConnect();
 
@@ -55,7 +55,7 @@ handler.get(async (req, res) => {
     if (category != 'Other') courseCategories.Other.courses += courseCategories[category].courses + '|';
     else courseCategories.Other.courses = courseCategories.Other.courses.slice(0, -1) + ')))'
 
-    await fetch(`http://localhost:3000/api/courses?pattern=${courseCategories[category].courses}`, {
+    await fetch(`${BASE_URL}/api/courses?pattern=${courseCategories[category].courses}`, {
       method: 'get',
     }).then (
       response => response.json()
