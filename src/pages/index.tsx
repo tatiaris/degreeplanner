@@ -10,6 +10,16 @@ import { CompletionColumn } from "../components/CompletionColumn";
 
 const Home = (): React.ReactNode => {
   const [courses, setCourses] = useState([]);
+  const [chosenCourseObj, setChosenCourseObj] = useState({
+    "id": "",
+    "name": "",
+    "department": "",
+    "course_num": 0,
+    "credit_hours": 0,
+    "description": "",
+    "prereqDescription": "",
+    "coreqDescription": ""
+  })
   const [courseCategories, setCourseCategories] = useState({});
   const [plannedCourses, setPlannedCourses] = useState([]);
   const [semesters, setSemesters] = useState([
@@ -34,12 +44,10 @@ const Home = (): React.ReactNode => {
   }
   const handleRemoveCourse = (e) => {
     let prevLocation = "";
-    let chosenCourseObject;
     let coursesCopy = courses.map((c, i) => {
       if (c.name == chosenCourse) {
         prevLocation = c.location;
         c.location = c.type;
-        chosenCourseObject = c;
       }
       return c;
     })
@@ -48,7 +56,7 @@ const Home = (): React.ReactNode => {
     semesters.map((sem, j) => {
       if (sem.name == prevLocation) {
         for (let i = 0; i < sem.courses.length; i++) {
-          if (sem.courses[i].name == chosenCourseObject.name) {
+          if (sem.courses[i].name == chosenCourseObj.name) {
             sem.courses.splice(i, 1)
           }
         }
@@ -60,22 +68,19 @@ const Home = (): React.ReactNode => {
   }
   const handleMoveCourse = (e) => {
     let prevLocation = "";
-    let chosenCourseObject;
-    // bug maybe here
     let allCoursesCopy = courses.map((c, i) => {
       if (c.name == chosenCourse) {
         prevLocation = c.location;
         c.location = chosenSemester;
-        chosenCourseObject = c;
       }
       return c;
     })
     setCourses(allCoursesCopy);
-    setPlannedCourses([chosenCourseObject].concat(plannedCourses))
+    setPlannedCourses([chosenCourseObj].concat(plannedCourses))
     semesters.map((sem, i) => {
       if (sem.name == prevLocation) {
         for (let i = 0; i < sem.courses.length; i++) {
-          if (sem.courses[i].name == chosenCourseObject.name) {
+          if (sem.courses[i].name == chosenCourseObj.name) {
             sem.courses.splice(i, 1)
           }
         }
@@ -84,7 +89,7 @@ const Home = (): React.ReactNode => {
     })
     semesters.map((sem, i) => {
       if (sem.name == chosenSemester) {
-        sem.courses.push(chosenCourseObject)
+        sem.courses.push(chosenCourseObj)
       }
     })
     setShow(false);
@@ -125,6 +130,12 @@ const Home = (): React.ReactNode => {
     setCourseCategories(allCourses.categories)
   }
   
+  useEffect(() => {
+    if (chosenCourse != ""){
+      setChosenCourseObj(courses.filter((c) => c.name === chosenCourse)[0])
+    }
+  }, [chosenCourse])
+
   useEffect(() => {
     loadCourses();
   }, [])
@@ -197,10 +208,12 @@ const Home = (): React.ReactNode => {
       </Row>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Course Information</Modal.Title>
+          <Modal.Title>{chosenCourseObj.name} <span style={{ color: "#6c757d" }}>[{chosenCourseObj.credit_hours}]</span></Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Details about course
+          {chosenCourseObj.description}<br/><br/>
+          {chosenCourseObj.prereqDescription}
+          {chosenCourseObj.coreqDescription}<br/><br/>
           <Form>
             <Form.Group>
               <Form.Label style={{ fontSize: "1.5em" }}>Choose a semester:</Form.Label>
