@@ -230,7 +230,7 @@ const Course = (): React.ReactNode => {
 
   return (
     <>
-      <Mheader title={"Home"} />
+      <Mheader title={`${urlCourse}`} />
       <Mnavbar theme={"dark"} />
       <Row id="page_container" style={{ margin: "0px" }}>
         <CourseColumn

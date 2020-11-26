@@ -32,7 +32,7 @@ const Home = (): React.ReactNode => {
             Mathematics
             <span style={{ float: "right", fontWeight: "bold" }}>-&gt;</span>
           </Button>
-          <Button href="/courses/physics" style={{ width: "100%", borderRadius: "0px", textAlign: "left", marginBottom: "15px" }}>
+          <Button href="/courses/phys" style={{ width: "100%", borderRadius: "0px", textAlign: "left", marginBottom: "15px" }}>
             Physics
             <span style={{ float: "right", fontWeight: "bold" }}>-&gt;</span>
           </Button>
