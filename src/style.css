@@ -16,6 +16,14 @@
   margin: 0px;
 }
 
+body {
+    background: #343a40;
+}
+
+button {
+    border-radius: 0px !important;
+}
+
 tr td a:visited {
     color: #ccd0d5 !important;
 }

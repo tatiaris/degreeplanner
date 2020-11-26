@@ -9,24 +9,24 @@ handler.use(middleware);
 handler.get(async (req, res) => {
   let courseCategories = {
     'Major': {
-      courses: '(csce-(121|181|221|222|312|313|314|315|481|482))',
-      hours: 30
+      courses: '(phys-(101|221|225|302|304|309|331|332|408|412))',
+      hours: 37
     },
     'Supporting': {
-      courses: '(engr-(102|216)|csce-(411)|stat-(211)|math-(304))',
-      hours: 50
+      courses: '(phys-(303|305|401|414|416|425|426|414|416|489|[6-9][0-9][0-9])|astr-(314|[6-9][0-9][0-9]))',
+      hours: 7
     },
     'Communication': {
-      courses: '(engl-(103|104)|comm-(203|204|205))',
+      courses: '(engl-(103|104|210)|comm-(203|204|205))',
       hours: 6
     },
     'Mathematics': {
-      courses: '(math-(151|152))',
-      hours: 8
+      courses: '(math-(171|172|221|308))',
+      hours: 15
     },
     'Life and Physical Sciences': {
-      courses: '(chem-(107|117)|phys-(206|207))',
-      hours: 10
+      courses: '(chem-(107|117|119|120)|phys-(206|226|207|227))',
+      hours: 12
     },
     'Language, Philosophy & Culture': {
       courses: '(engr-482)',
@@ -37,12 +37,16 @@ handler.get(async (req, res) => {
       hours: 3
     },
     'Social and Behavioral Sciences': {
-      courses: '(econ-(203))',
+      courses: '(econ-(203|202))',
       hours: 3
     },
     'Citizenship': {
       courses: '(hist-(105|106)|pols-(206|207))',
       hours: 12
+    },
+    'General Electives': {
+      courses: '(csce-(110|181|222)|engr-(102)|geog-(201)|hlth-(236)|math-(302|304)|phys-(216)|stat-(211|212))',
+      hours: 8
     },
     'Other': {
       courses: '^(?:(?!(',
@@ -67,7 +71,7 @@ handler.get(async (req, res) => {
     ).catch((e) => console.log(e));
   }
 
-  res.json({majorName: 'Computer Science', courses: applicableCourses, categories: courseCategories});
+  res.json({majorName: 'Physics', courses: applicableCourses, categories: courseCategories});
 });
 
 export default handler;
