@@ -298,13 +298,10 @@ const Course = (): React.ReactNode => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {chosenCourseObj.description}
-          <br />
-          <br />
+          <h4 style={{ margin: "0px" }}>{chosenCourseObj.title}</h4><br/>
+          {chosenCourseObj.description}<br /><br />
           {chosenCourseObj.prereqDescription}
-          {chosenCourseObj.coreqDescription}
-          <br />
-          <br />
+          {chosenCourseObj.coreqDescription}<br /><br />
           <Form>
             <Form.Group>
               <Form.Label style={{ fontSize: "1.5em" }}>
@@ -314,7 +311,7 @@ const Course = (): React.ReactNode => {
                 onChange={(e) => setChosenSemester(e.target.value)}
                 as="select"
                 htmlSize={semesters.length}
-                style={{ padding: "0px", background: "#b5ddff" }}
+                style={{ padding: "0px" }}
                 custom
               >
                 {semesterOptions}
