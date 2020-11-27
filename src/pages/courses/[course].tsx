@@ -16,6 +16,7 @@ const Course = (): React.ReactNode => {
   const [chosenCourseObj, setChosenCourseObj] = useState({
     id: "",
     name: "",
+    title: "",
     department: "",
     course_num: 0,
     credit_hours: 0,
