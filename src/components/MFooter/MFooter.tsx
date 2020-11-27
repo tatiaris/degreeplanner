@@ -7,7 +7,7 @@ import { Container, Row, Col, Button, Table } from "react-bootstrap";
 export const MFooter: React.FC = () => {
   return (
     <>
-      <footer style={{ background: "#343a40", color: "white", borderTop: "1px solid #40484f", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center"  }}>
+      <footer style={{ background: "#25282d", color: "white", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center"  }}>
         <Container fluid style={{  }}>
           <Row className="justify-content-md-center">
             <Col sm="auto">
