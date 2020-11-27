@@ -36,14 +36,16 @@ handler.get(async (req, res) => {
     if (courseDescription.match(/Corequisites*: .*\./g) != null) {
       coreqDescription = courseDescription.match(/Corequisites*: [^\.]*./g)[0];
     }
-
     const eqCourses = courseFullTitle[0].split('/');
+    courseFullTitle.shift()
+    const title = courseFullTitle.join(' ')
     for (let j = 0; j < 1; j++) {
       let deptName = eqCourses[j].substr(0, 4);
       let courseNum = eqCourses[j].substr(5);
       courses.push({
         id: deptName.toLowerCase() + '-' + courseNum,
         name: deptName + ' - ' + courseNum,
+        title: title,
         department: deptName,
         course_num: parseInt(courseNum),
         credit_hours: creditHours,
