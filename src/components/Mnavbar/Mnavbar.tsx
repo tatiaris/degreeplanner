@@ -9,7 +9,7 @@ import { Navbar, Nav, Form, FormControl, Button, NavDropdown } from "react-boots
 export const Mnavbar: React.FC<MnavbarProps> = (props) => {
   return (
     <>
-      <Navbar style={{ borderBottom: "1px solid #454d55" }} collapseOnSelect expand="lg" bg={props.theme} variant={props.theme}>
+      <Navbar style={{ backgroundColor: "#25282d !important" }} collapseOnSelect expand="lg" bg={props.theme} variant={props.theme}>
         <Navbar.Brand href="/">Aggie Degree Planner</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
