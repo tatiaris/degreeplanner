@@ -8,7 +8,7 @@ import { CollapsibleBtns } from "../../components/CollapsibleBtns";
 import { CourseColumn } from "../../components/CourseColumn";
 import { CompletionColumn } from "../../components/CompletionColumn";
 
-const Course = (): React.ReactNode => {  
+const Course = (): React.ReactNode => {
   const router = useRouter()
   const urlCourse = router.query.course;
   const [majorName, setMajorName] = useState('');

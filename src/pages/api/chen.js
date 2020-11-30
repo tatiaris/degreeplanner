@@ -55,16 +55,9 @@ handler.get(async (req, res) => {
     if (category != 'Other') courseCategories.Other.courses += courseCategories[category].courses + '|';
     else courseCategories.Other.courses = courseCategories.Other.courses.slice(0, -1) + ')))'
 
-    await fetch(`${BASE_URL}/api/courses?pattern=${courseCategories[category].courses}`, {
-      method: 'get',
-    }).then (
-      response => response.json()
-    ).then (
-      (data) => {
-        data.courses.map(d => {d.type = category; d.location = category})
-        applicableCourses = applicableCourses.concat(data.courses)
-      }
-    ).catch((e) => console.log(e));
+    let courses = await req.db.collection("courses").find({ id: RegExp(courseCategories[category].courses) }).toArray();
+    courses.map(d => {d.type = category; d.location = category})
+    applicableCourses = applicableCourses.concat(courses)
   }
 
   res.json({majorName: 'Chemical Engineering', courses: applicableCourses, categories: courseCategories});
