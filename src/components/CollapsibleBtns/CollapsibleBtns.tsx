@@ -21,7 +21,7 @@ export const CollapsibleBtns: React.FC<CollapsibleBtnsProps> = (props) => {
     optionsComponent = options.map((o, i) => {
       if (o.location == props.courseType || (props.opposite && o.type == props.courseType)) {
         return (
-          <Button key={`course-btn-${o.id}`} name={o.name} variant={bootVariant} onClick={handleCourseBtnClick} style={{ width: "100%", borderRadius: "0px", textAlign: "left", background: `${cellColor}` }}>
+          <Button key={`course-btn-${o.id}`} name={o.id} variant={bootVariant} onClick={handleCourseBtnClick} style={{ width: "100%", borderRadius: "0px", textAlign: "left", background: `${cellColor}` }}>
             {o.name}
             <span style={{ float: "right", fontWeight: "bold" }}>{o.credit_hours}</span>
           </Button>

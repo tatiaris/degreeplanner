@@ -61,7 +61,7 @@ handler.get(async (req, res) => {
       response => response.json()
     ).then (
       (data) => {
-        data.courses.map(d => {d.type = category; d.location = category})
+        data.courses.map(d => {d.type = category; d.location = category; d.planned = false})
         applicableCourses = applicableCourses.concat(data.courses)
       }
     ).catch((e) => console.log(e));
