@@ -4,32 +4,72 @@ import middleware from "../../../middleware/database";
 const handler = nextConnect();
 handler.use(middleware);
 
-const tickers = {'IBM': 'International Business Machines'}
+let tickers = {'IBM': 'IBM NAME'}
+const loadTickers = async () => {
+  await fetch('http://localhost:3000/api/get_sp_tickers', { method: 'get' }).then( response => response.json()).then (d => tickers = d)
+}
 
-const getAdditionalInfo = async (tkr) => {
-  let info = {}
+const getAdditionalInfo = async (tkrs) => {
+  let tickersInfo = []
 
-  const infoType = 'Time Series (Daily)'
+  const tickersUrlString = tkrs.join(',')
 
-  // const apiUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${tkr}&apikey=A46FRBO6IAUSCT0L&outputsize=full`;
-  const apiUrl = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&outputsize=full&apikey=demo`
+  const apiUrl = `https://data.alpaca.markets/v1/bars/day?symbols=${tickersUrlString}&limit=300`
   await fetch(apiUrl, {
     method: 'get',
+    headers: {
+      'APCA-API-KEY-ID': 'PKEUPEV0O4YX6OLQBYTM',
+      'APCA-API-SECRET-KEY': 'grMDCv7RE5AgKb2v6ekjRBtEx5T4qqOgU4xKiHrx'
+    }
   }).then (
     response => response.json()
   ).then ( data => {
-      if (typeof data[infoType] !== 'undefined') {
-        const dates = Object.keys(data[infoType])
-        const todayPrice = parseFloat(data[infoType][dates[0]]['4. close'])
-        const yesterdayPrice = parseFloat(data[infoType][dates[1]]['4. close'])
-        const monthAgoPrice = parseFloat(data[infoType][dates[21]]['4. close'])
-        const yearAgoPrice = parseFloat(data[infoType][dates[253]]['4. close'])
+    const returnedTickers = Object.keys(data)
+    for (let i = 0; i < returnedTickers.length; i++) {
+      const tkr = returnedTickers[i]
+      let info = {}
+      if (typeof data[tkr] !== 'undefined') {
+        const priceList = data[tkr]
+        const todayData = priceList[priceList.length - 1]
+        const yesterdayData = priceList[priceList.length - 2]
+        const weekAgoData = priceList[priceList.length - 6]
+        const monthAgoData = priceList[priceList.length - 21]
+        const sixMonthAgoData = priceList[priceList.length - 126]
+        const yearAgoData = priceList[priceList.length - 253]
         info.name = tickers[tkr]
         info.ticker = tkr
-        info.price = todayPrice
-        info.dailyChange = Math.round((todayPrice - yesterdayPrice)*10000/yesterdayPrice)/100
-        info.monthlyChange = Math.round((todayPrice - monthAgoPrice)*10000/monthAgoPrice)/100
-        info.yearlyChange = Math.round((todayPrice - yearAgoPrice)*10000/yearAgoPrice)/100
+        info.price = todayData.c
+
+        let latestAvailable = todayData
+        try {
+          info.dailyChange = Math.round((todayData.c - yesterdayData.c)*10000/yesterdayData.c)/100
+          latestAvailable = yesterdayData
+        } catch (error) {
+          info.dailyChange = 0
+        }
+        try {
+          info.weeklyChange = Math.round((todayData.c - weekAgoData.c)*10000/weekAgoData.c)/100
+          latestAvailable = weekAgoData
+        } catch (error) {
+          info.weeklyChange = Math.round((todayData.c - latestAvailable.c)*10000/latestAvailable.c)/100
+        }
+        try {
+          info.monthlyChange = Math.round((todayData.c - monthAgoData.c)*10000/monthAgoData.c)/100
+          latestAvailable = monthAgoData
+        } catch (error) {
+          info.monthlyChange = Math.round((todayData.c - latestAvailable.c)*10000/latestAvailable.c)/100
+        }
+        try {
+          info.sixMonthlyChange = Math.round((todayData.c - sixMonthAgoData.c)*10000/sixMonthAgoData.c)/100
+          latestAvailable = sixMonthAgoData
+        } catch (error) {
+          info.monthlyChange = Math.round((todayData.c - latestAvailable.c)*10000/latestAvailable.c)/100
+        }
+        try {
+          info.yearlyChange = Math.round((todayData.c - yearAgoData.c)*10000/yearAgoData.c)/100
+        } catch (error) {
+          info.yearlyChange = Math.round((todayData.c - latestAvailable.c)*10000/latestAvailable.c)/100          
+        }
       } else {
         console.log(data);
         info.name = tickers[tkr]
@@ -39,10 +79,11 @@ const getAdditionalInfo = async (tkr) => {
         info.monthlyChange = 0
         info.yearlyChange = 0
       }
+      tickersInfo.push(info)
     }
-  ).catch((e) => console.log(e));
+  }).catch((e) => console.log(e));
 
-  return Promise.resolve(info)
+  return Promise.resolve(tickersInfo)
 }
 
 const getData = async () => {
@@ -50,10 +91,10 @@ const getData = async () => {
 
   let symbols = Object.keys(tickers)
 
-  for (let i = 0; i < symbols.length; i++){
-    await getAdditionalInfo(symbols[i]).then(
+  for (let i = 0; i < symbols.length; i += 100){
+    await getAdditionalInfo(symbols.slice(i, i + 100)).then(
       info => {
-        doc.rows.push(info)
+        doc.rows = doc.rows.concat(info)
       }
     ).catch((e) => console.log(e));
   }
@@ -63,6 +104,7 @@ const getData = async () => {
 
 handler.get(async (req, res) => {
   let doc = {}
+  await loadTickers()
   await getData().then(d => {
     doc = d
   }).catch(e => console.log(e))
