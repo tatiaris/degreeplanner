@@ -1,12 +1,13 @@
 import nextConnect from "next-connect";
 import middleware from "../../../middleware/database";
+const { BASE_URL } = process.env
 
 const handler = nextConnect();
 handler.use(middleware);
 
 let tickers = {'IBM': 'IBM NAME'}
 const loadTickers = async () => {
-  await fetch('http://localhost:3000/api/get_sp_tickers', { method: 'get' }).then( response => response.json()).then (d => tickers = d)
+  await fetch(`${BASE_URL}/api/get_sp_tickers`, { method: 'get' }).then( response => response.json()).then (d => tickers = d)
 }
 
 const getAdditionalInfo = async (tkrs) => {
