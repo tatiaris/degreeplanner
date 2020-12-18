@@ -50,13 +50,13 @@ const Course = (): React.ReactNode => {
   const handleRemoveCourse = (e) => {
     let prevLocation = "";
     let coursesCopy = courses.map((c, i) => {
-      if (c.name == chosenCourse) {
+      if (c.id == chosenCourse) {
         prevLocation = c.location;
         c.location = c.type;
       }
       return c;
     });
-    setPlannedCourses(plannedCourses.filter((c) => c.name !== chosenCourse));
+    setPlannedCourses(plannedCourses.filter((c) => c.id !== chosenCourse));
     setCourses(coursesCopy);
     semesters.map((sem, j) => {
       if (sem.name == prevLocation) {
@@ -74,14 +74,16 @@ const Course = (): React.ReactNode => {
   const handleMoveCourse = (e) => {
     let prevLocation = "";
     let allCoursesCopy = courses.map((c, i) => {
-      if (c.name == chosenCourse) {
+      if (c.id == chosenCourse) {
         prevLocation = c.location;
         c.location = chosenSemester;
       }
       return c;
     });
     setCourses(allCoursesCopy);
-    setPlannedCourses([chosenCourseObj].concat(plannedCourses));
+    if (plannedCourses.indexOf(chosenCourseObj) < 0) {
+      setPlannedCourses([chosenCourseObj].concat(plannedCourses));
+    }
     semesters.map((sem, i) => {
       if (sem.name == prevLocation) {
         for (let i = 0; i < sem.courses.length; i++) {
@@ -123,6 +125,7 @@ const Course = (): React.ReactNode => {
         for (let j = 0; j < semesters[i].courses.length; j++) {
           k = coursesIndexMap[semesters[i].courses[j].name];
           updatedCourses[k].location = updatedCourses[k].type;
+          setPlannedCourses(plannedCourses.filter((c) => c.id !== semesters[i].courses[j].id));
         }
         setCourses(updatedCourses);
       }
@@ -140,7 +143,7 @@ const Course = (): React.ReactNode => {
 
   useEffect(() => {
     if (chosenCourse != "") {
-      setChosenCourseObj(courses.filter((c) => c.name === chosenCourse)[0]);
+      setChosenCourseObj(courses.filter((c) => c.id === chosenCourse)[0]);
     }
   }, [chosenCourse]);
 
@@ -180,7 +183,7 @@ const Course = (): React.ReactNode => {
               <Button
                 key={`course-btn-${c.id}`}
                 onClick={handleTableCourseClick}
-                name={c.name}
+                name={c.id}
                 variant="danger"
                 style={{ width: "100%", height: "50px", borderRadius: "0px" }}
               >
