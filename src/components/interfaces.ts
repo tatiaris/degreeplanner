@@ -29,3 +29,6 @@ export interface CompletionColumnProps {
     opposite: boolean;
     categories: any;
 }
+export interface PlaceHolderProps {
+  show: boolean;
+}

@@ -11,7 +11,7 @@ export const MFooter: React.FC = () => {
         <Container fluid style={{  }}>
           <Row className="justify-content-md-center">
             <Col sm="auto">
-              <span>Aggie Degree Planner &copy; 2020-2021 by <a href="https://www.tatiaris.com">Rishabh Tatia</a></span>
+              <span>Aggie Degree Planner &copy; 2020-2021 by <a target="_blank" href="https://tatiaris.com">Rishabh Tatia</a></span>
             </Col>
           </Row>
         </Container>

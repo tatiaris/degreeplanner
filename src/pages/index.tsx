@@ -17,22 +17,22 @@ const Home = (): React.ReactNode => {
       <Row id="page_container" style={{ margin: "0px" }}>
         <Col sm="2" style={{ padding: "15px" }}>
           <p style={{ fontSize: "2em", fontWeight: "bold", color: "white" }}>Engineering</p>
-          <Button href="/courses/csce" style={{ width: "100%", borderRadius: "0px", textAlign: "left", marginBottom: "15px" }}>
+          <Button href="/major/csce" style={{ width: "100%", borderRadius: "0px", textAlign: "left", marginBottom: "15px" }}>
             Computer Science
             <span style={{ float: "right", fontWeight: "bold" }}>-&gt;</span>
           </Button>
-          <Button href="/courses/chen" style={{ width: "100%", borderRadius: "0px", textAlign: "left", marginBottom: "15px" }}>
+          <Button href="/major/chen" style={{ width: "100%", borderRadius: "0px", textAlign: "left", marginBottom: "15px" }}>
             Chemical Engineering
             <span style={{ float: "right", fontWeight: "bold" }}>-&gt;</span>
           </Button>
         </Col>
         <Col sm="2" style={{ padding: "15px" }}>
           <p style={{ fontSize: "2em", fontWeight: "bold", color: "white" }}>Science</p>
-          <Button href="/courses/math" style={{ width: "100%", borderRadius: "0px", textAlign: "left", marginBottom: "15px" }}>
+          <Button href="/major/math" style={{ width: "100%", borderRadius: "0px", textAlign: "left", marginBottom: "15px" }}>
             Mathematics
             <span style={{ float: "right", fontWeight: "bold" }}>-&gt;</span>
           </Button>
-          <Button href="/courses/phys" style={{ width: "100%", borderRadius: "0px", textAlign: "left", marginBottom: "15px" }}>
+          <Button href="/major/phys" style={{ width: "100%", borderRadius: "0px", textAlign: "left", marginBottom: "15px" }}>
             Physics
             <span style={{ float: "right", fontWeight: "bold" }}>-&gt;</span>
           </Button>

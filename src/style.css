@@ -39,6 +39,10 @@ span a {
     color: white !important;
 }
 
+span a:hover {
+  text-decoration: underline;
+}
+
 .modal-content {
     border-radius: 0px;
 }
@@ -56,6 +60,14 @@ span a {
 table {
     border: 0px;
 }
+
+.ui.inverted.placeholder, .ui.inverted.placeholder .image.header::after, .ui.inverted.placeholder .line, .ui.inverted.placeholder .line::after, .ui.inverted.placeholder > ::before {
+	background-color: #1c1f22;
+}
+.ui.inverted.segment, .ui.primary.inverted.segment {
+	background: #1c1f22;
+}
+
 @media (min-width: 768px) {
     #page_container.row {
         height: calc(90vh);

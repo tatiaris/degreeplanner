@@ -1,18 +1,18 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Mheader } from "../../components/Mheader";
-import { Mnavbar } from "../../components/Mnavbar/";
+import { Mnavbar } from "../../components/Mnavbar";
 import { MFooter } from "../../components/MFooter";
 import { Col, Row, Button, Modal, Form, Table } from "react-bootstrap";
-import { CollapsibleBtns } from "../../components/CollapsibleBtns";
 import { CourseColumn } from "../../components/CourseColumn";
 import { CompletionColumn } from "../../components/CompletionColumn";
 
 const Course = (): React.ReactNode => {
   const router = useRouter()
-  const urlCourse = router.query.course;
+  const majorCode = router.query.major;
   const [majorName, setMajorName] = useState('');
   const [courses, setCourses] = useState([]);
+  const [samplePlan, setSamplePlan] = useState({});
   const [chosenCourseObj, setChosenCourseObj] = useState({
     id: "",
     name: "",
@@ -32,6 +32,8 @@ const Course = (): React.ReactNode => {
   ]);
   const [chosenCourse, setChosenCourse] = useState("");
   const [chosenSemester, setChosenSemester] = useState("");
+  const [loadSampleSemesters, setLoadSampleSemesters] = useState(false);
+  const [loadSampleCourses, setLoadSampleCourses] = useState(false);
 
   let coursesIndexMap = {};
   for (let i = 0; i < courses.length; i++) {
@@ -71,12 +73,12 @@ const Course = (): React.ReactNode => {
 
     setShow(false);
   };
-  const handleMoveCourse = (e) => {
+  const moveCourse = (courseId, semesterId) => {
     let prevLocation = "";
     let allCoursesCopy = courses.map((c, i) => {
-      if (c.id == chosenCourse) {
+      if (c.id == courseId) {
         prevLocation = c.location;
-        c.location = chosenSemester;
+        c.location = semesterId;
       }
       return c;
     });
@@ -95,51 +97,115 @@ const Course = (): React.ReactNode => {
       return sem;
     });
     semesters.map((sem, i) => {
-      if (sem.name == chosenSemester) {
+      if (sem.name == semesterId) {
         sem.courses.push(chosenCourseObj);
       }
     });
+  }
+  const handleMoveCourse = (e) => {
+    moveCourse(chosenCourse, chosenSemester)
     setShow(false);
   };
   const [newSemester, setNewSemester] = useState("");
   const [showSemesterModal, setShowSemesterModal] = useState(false);
   const activateAddSemesterModal = (e) => setShowSemesterModal(true);
   const handleCloseSemesterModal = (e) => setShowSemesterModal(false);
+  const addSemesters = (newSemesters) => {
+    let updatedSemesters = [].concat(semesters)
+    newSemesters.map((s, i) => {
+      updatedSemesters.push({ name: s, courses: [] })
+    })
+    setSemesters(updatedSemesters);
+    setLoadSampleSemesters(true);
+  }
   const handleAddSemester = (e) => {
-    setSemesters(
-      semesters.concat({
-        name: newSemester,
-        courses: [],
-      })
-    );
+    addSemesters([newSemester])
     setShowSemesterModal(false);
   };
-  const handleRemoveSemester = (e) => {
+  const removeSemester = (semesterNames) => {
     let updatedSemesterList = [];
+    let updatedCourses = [].concat(courses);
+    let updatedPlannedCourses = []
     for (let i = 0; i < semesters.length; i++) {
-      if (semesters[i].name != newSemester) {
+      if (semesterNames.indexOf(semesters[i].name) < 0) {
         updatedSemesterList.push(semesters[i]);
+        updatedPlannedCourses = updatedPlannedCourses.concat(semesters[i].courses)
       } else {
-        let updatedCourses = [].concat(courses);
         let k = 0;
         for (let j = 0; j < semesters[i].courses.length; j++) {
           k = coursesIndexMap[semesters[i].courses[j].name];
           updatedCourses[k].location = updatedCourses[k].type;
-          setPlannedCourses(plannedCourses.filter((c) => c.id !== semesters[i].courses[j].id));
         }
-        setCourses(updatedCourses);
       }
     }
+    setCourses(updatedCourses);
+    setPlannedCourses(updatedPlannedCourses);
     setSemesters(updatedSemesterList);
+  }
+  const handleRemoveSemester = (e) => {
+    removeSemester([newSemester])
   };
 
+  const addSampleCourses = () => {
+    let updatedSemesters = [].concat(semesters)
+    let updatedCourses = [].concat(courses)
+    let updatedPlannedCourses = [].concat(plannedCourses)
+
+    const sampleSemesters = Object.keys(samplePlan)
+    for (let i = 0; i < sampleSemesters.length; i++) {
+      const semesterId = sampleSemesters[i];
+      for (let k = 0; k < samplePlan[semesterId].length; k++) {
+        const courseId = samplePlan[semesterId][k];
+        const courseObj = courses.filter((c) => c.id === courseId)[0];
+        updatedPlannedCourses.push(courseObj)
+        updatedSemesters.map(s => {
+          if (s.name == semesterId) {
+            s.courses.push(courseObj)
+          }
+          return s
+        })
+        updatedCourses.map((c, i) => {
+          if (c.id == courseId) {
+            c.location = semesterId;
+          }
+          return c;
+        });
+      }
+    }
+
+    setCourses(updatedCourses)
+    setPlannedCourses(updatedPlannedCourses)
+    setSemesters(updatedSemesters)
+  }
+
+  const loadSamplePlan = (e) => {
+    removeSemester(semesters.map(s => s.name))
+    setLoadSampleSemesters(true)
+  }
+
   const loadCourses = async () => {
-    const res = await fetch(`/api/${urlCourse}`);
+    const res = await fetch(`/api/${majorCode}`);
     const allCourses = await res.json();
     setCourses(allCourses.courses);
     setCourseCategories(allCourses.categories);
     setMajorName(allCourses.majorName)
+    setSamplePlan(allCourses.samplePlan)
   };
+
+  useEffect(() => {
+    if (loadSampleSemesters) {
+      addSemesters(Object.keys(samplePlan))
+      setLoadSampleSemesters(false)
+      setLoadSampleCourses(true)
+    }
+  }, [loadSampleSemesters])
+
+  useEffect(() => {
+    if (loadSampleCourses) {
+      addSampleCourses()
+      setLoadSampleCourses(false)
+    }
+  }, [loadSampleCourses])
 
   useEffect(() => {
     if (chosenCourse != "") {
@@ -148,89 +214,72 @@ const Course = (): React.ReactNode => {
   }, [chosenCourse]);
 
   useEffect(() => {
-    if (urlCourse) loadCourses();
-  }, [urlCourse]);
+    if (majorCode) loadCourses();
+  }, [majorCode]);
 
-  let semesterOptions = [];
-  let semestersComponent = [];
   let tableComponent = <></>;
   let coursesComponent = [];
-  if (semesters.length > 0) {
-    coursesComponent = [];
-    semesterOptions = semesters.map((sem, i) => (
-      <option
-        key={`semester-option-${sem.name}`}
+  const semestersComponent = semesters.map((sem, i) => {
+    let total_credit_hours = 0;
+    coursesComponent = sem.courses.map((c, j) => {
+      total_credit_hours += c.credit_hours;
+      return (
+        <tr key={`course-row-${c.id}`}>
+          <td>{j + 1}</td>
+          <td>{c.department}</td>
+          <td>{c.course_num}</td>
+          <td>{c.credit_hours}</td>
+          <td style={{ padding: "0px" }}>
+            <Button
+              key={`course-btn-${c.id}`}
+              onClick={handleTableCourseClick}
+              name={c.id}
+              variant="danger"
+              style={{ width: "100%", height: "50px", borderRadius: "0px" }}
+            >
+              &#8942;
+            </Button>
+          </td>
+        </tr>
+      );
+    });
+    tableComponent = (
+      <Table
+        key={`course-table-${sem.name}`}
+        hover
+        variant="dark"
         style={{
-          textAlign: "center",
-          fontSize: "1.5em",
-          borderBottom: "1px solid white",
+          marginTop: "1em",
+          marginBottom: "3em",
+          background: "#2a2e33",
         }}
       >
-        {sem.name}
-      </option>
-    ));
-    semestersComponent = semesters.map((sem, i) => {
-      let total_credit_hours = 0;
-      coursesComponent = sem.courses.map((c, j) => {
-        total_credit_hours += c.credit_hours;
-        return (
-          <tr key={`course-row-${c.id}`}>
-            <td>{j + 1}</td>
-            <td>{c.department}</td>
-            <td>{c.course_num}</td>
-            <td>{c.credit_hours}</td>
-            <td style={{ padding: "0px" }}>
-              <Button
-                key={`course-btn-${c.id}`}
-                onClick={handleTableCourseClick}
-                name={c.id}
-                variant="danger"
-                style={{ width: "100%", height: "50px", borderRadius: "0px" }}
-              >
-                &#8942;
-              </Button>
-            </td>
+        <thead>
+          <tr style={{ background: "#1c1f22" }}>
+            <th style={{ border: "none", width: "200px" }} colSpan={2}>
+              {sem.name}
+            </th>
+            <th style={{ border: "none" }}>
+              Courses Planned: {sem.courses.length}
+            </th>
+            <th style={{ border: "none" }}>
+              Total Credit Hours: {total_credit_hours}
+            </th>
+            <th></th>
           </tr>
-        );
-      });
-      tableComponent = (
-        <Table
-          key={`course-table-${sem.name}`}
-          hover
-          variant="dark"
-          style={{
-            marginTop: "1em",
-            marginBottom: "3em",
-            background: "#2a2e33",
-          }}
-        >
-          <thead>
-            <tr style={{ background: "#1c1f22" }}>
-              <th style={{ border: "none", width: "200px" }} colSpan={2}>
-                {sem.name}
-              </th>
-              <th style={{ border: "none" }}>
-                Courses Planned: {sem.courses.length}
-              </th>
-              <th style={{ border: "none" }}>
-                Total Credit Hours: {total_credit_hours}
-              </th>
-              <th></th>
-            </tr>
-            <tr>
-              <th>#</th>
-              <th>Department</th>
-              <th>Course #</th>
-              <th>Credit Hours</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>{coursesComponent}</tbody>
-        </Table>
-      );
-      return tableComponent;
-    });
-  }
+          <tr>
+            <th>#</th>
+            <th>Department</th>
+            <th>Course #</th>
+            <th>Credit Hours</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>{coursesComponent}</tbody>
+      </Table>
+    );
+    return tableComponent;
+  });
 
   return (
     <>
@@ -274,16 +323,11 @@ const Course = (): React.ReactNode => {
                 justifyContent: "right",
               }}
             >
-              <Button
-                variant="success"
-                style={{ borderRadius: "0px" }}
-                onClick={activateAddSemesterModal}
-              >
-                Add/Remove Semesters
-              </Button>
+              <Button variant="success" style={{ borderRadius: "0px" }} onClick={activateAddSemesterModal}>Add/Remove Semesters</Button>
             </Col>
           </Row>
           {semestersComponent}
+          <Button variant="info" style={{ borderRadius: "0px", marginBottom: "3em" }} onClick={loadSamplePlan}>Load Sample Plan</Button>
         </Col>
         <CompletionColumn
           categories={courseCategories}
@@ -318,7 +362,19 @@ const Course = (): React.ReactNode => {
                 style={{ padding: "0px" }}
                 custom
               >
-                {semesterOptions}
+                {semesters.map((sem, i) => (
+                  <option
+                    key={`semester-option-${sem.name}`}
+                    id={`${sem.name}`}
+                    style={{
+                      textAlign: "center",
+                      fontSize: "1.5em",
+                      borderBottom: "1px solid white",
+                    }}
+                  >
+                    {sem.name}
+                  </option>
+                ))}
               </Form.Control>
             </Form.Group>
           </Form>

@@ -50,6 +50,18 @@ handler.get(async (req, res) => {
     }
   }
 
+  let samplePlan = {
+    "Pre-acquired credits": [],
+    "1st Semester": [],
+    "2nd Semester": [],
+    "3rd Semester": [],
+    "4th Semester": [],
+    "5th Semester": [],
+    "6th Semester": [],
+    "7th Semester": [],
+    "8th Semester": [],
+  }
+
   let applicableCourses = []
   for (let category in courseCategories) {
     if (category != 'Other') courseCategories.Other.courses += courseCategories[category].courses + '|';
@@ -60,7 +72,7 @@ handler.get(async (req, res) => {
     applicableCourses = applicableCourses.concat(courses)
   }
 
-  res.json({majorName: 'Chemical Engineering', courses: applicableCourses, categories: courseCategories});
+  res.json({majorName: 'Chemical Engineering', courses: applicableCourses, categories: courseCategories, samplePlan: samplePlan});
 });
 
 export default handler;
