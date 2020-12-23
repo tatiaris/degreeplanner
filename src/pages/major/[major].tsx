@@ -42,7 +42,7 @@ const Course = (): React.ReactNode => {
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleCourseClick = (course = 'nothing') => {
+  const handleCourseClick = (course) => {
     setChosenCourse(course);
     setShow(true);
   };

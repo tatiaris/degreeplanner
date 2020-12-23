@@ -15,25 +15,31 @@ export interface Course {
   description: string;
   prereqDescription: string;
   coreqDescription: string;
+  location?: string;
+  type?: string;
+}
+export interface Category {
+  courses: string;
+  hours: number;
 }
 export interface CollapsibleBtnsProps {
   courseType: string;
   courseList: Array<Course>;
-  activateModal: () => void;
+  activateModal: (course: string) => void;
   opposite: boolean;
   reqAmount: number;
 }
 export interface CourseColumnProps {
   courseList: Array<Course>;
-  handleCourseClick: () => void;
+  handleCourseClick: (course: string) => void;
   opposite: boolean;
-  categories: Record<string, unknown>;
+  categories: Record<string, Category>;
 }
 export interface CompletionColumnProps {
   courseList: Array<Course>;
-  handleCourseClick: () => void;
+  handleCourseClick: (course: string) => void;
   opposite: boolean;
-  categories: Record<string, unknown>;
+  categories: Record<string, Category>;
 }
 export interface PlaceHolderProps {
   show: boolean;
