@@ -8,9 +8,9 @@ import { CourseColumn } from "../../components/CourseColumn";
 import { CompletionColumn } from "../../components/CompletionColumn";
 
 const Course = (): React.ReactNode => {
-  const router = useRouter()
+  const router = useRouter();
   const majorCode = router.query.major;
-  const [majorName, setMajorName] = useState('');
+  const [majorName, setMajorName] = useState("");
   const [courses, setCourses] = useState([]);
   const [samplePlan, setSamplePlan] = useState({});
   const [chosenCourseObj, setChosenCourseObj] = useState({
@@ -35,7 +35,7 @@ const Course = (): React.ReactNode => {
   const [loadSampleSemesters, setLoadSampleSemesters] = useState(false);
   const [loadSampleCourses, setLoadSampleCourses] = useState(false);
 
-  let coursesIndexMap = {};
+  const coursesIndexMap = {};
   for (let i = 0; i < courses.length; i++) {
     coursesIndexMap[courses[i].name] = i;
   }
@@ -49,9 +49,9 @@ const Course = (): React.ReactNode => {
   const handleTableCourseClick = (e) => {
     handleCourseClick(e.target.name);
   };
-  const handleRemoveCourse = (e) => {
+  const handleRemoveCourse = () => {
     let prevLocation = "";
-    let coursesCopy = courses.map((c, i) => {
+    const coursesCopy = courses.map((c) => {
       if (c.id == chosenCourse) {
         prevLocation = c.location;
         c.location = c.type;
@@ -60,7 +60,7 @@ const Course = (): React.ReactNode => {
     });
     setPlannedCourses(plannedCourses.filter((c) => c.id !== chosenCourse));
     setCourses(coursesCopy);
-    semesters.map((sem, j) => {
+    semesters.map((sem) => {
       if (sem.name == prevLocation) {
         for (let i = 0; i < sem.courses.length; i++) {
           if (sem.courses[i].name == chosenCourseObj.name) {
@@ -75,7 +75,7 @@ const Course = (): React.ReactNode => {
   };
   const moveCourse = (courseId, semesterId) => {
     let prevLocation = "";
-    let allCoursesCopy = courses.map((c, i) => {
+    const allCoursesCopy = courses.map((c) => {
       if (c.id == courseId) {
         prevLocation = c.location;
         c.location = semesterId;
@@ -86,7 +86,7 @@ const Course = (): React.ReactNode => {
     if (plannedCourses.indexOf(chosenCourseObj) < 0) {
       setPlannedCourses([chosenCourseObj].concat(plannedCourses));
     }
-    semesters.map((sem, i) => {
+    semesters.map((sem) => {
       if (sem.name == prevLocation) {
         for (let i = 0; i < sem.courses.length; i++) {
           if (sem.courses[i].name == chosenCourseObj.name) {
@@ -96,40 +96,41 @@ const Course = (): React.ReactNode => {
       }
       return sem;
     });
-    semesters.map((sem, i) => {
+    semesters.map((sem) => {
       if (sem.name == semesterId) {
         sem.courses.push(chosenCourseObj);
       }
     });
-  }
-  const handleMoveCourse = (e) => {
-    moveCourse(chosenCourse, chosenSemester)
+  };
+  const handleMoveCourse = () => {
+    moveCourse(chosenCourse, chosenSemester);
     setShow(false);
   };
   const [newSemester, setNewSemester] = useState("");
   const [showSemesterModal, setShowSemesterModal] = useState(false);
-  const activateAddSemesterModal = (e) => setShowSemesterModal(true);
-  const handleCloseSemesterModal = (e) => setShowSemesterModal(false);
+  const activateAddSemesterModal = () => setShowSemesterModal(true);
+  const handleCloseSemesterModal = () => setShowSemesterModal(false);
   const addSemesters = (newSemesters) => {
-    let updatedSemesters = [].concat(semesters)
-    newSemesters.map((s, i) => {
-      updatedSemesters.push({ name: s, courses: [] })
-    })
+    const updatedSemesters = [].concat(semesters);
+    newSemesters.map((s) => {
+      updatedSemesters.push({ name: s, courses: [] });
+    });
     setSemesters(updatedSemesters);
-    setLoadSampleSemesters(true);
-  }
-  const handleAddSemester = (e) => {
-    addSemesters([newSemester])
+  };
+  const handleAddSemester = () => {
+    addSemesters([newSemester]);
     setShowSemesterModal(false);
   };
   const removeSemester = (semesterNames) => {
-    let updatedSemesterList = [];
-    let updatedCourses = [].concat(courses);
-    let updatedPlannedCourses = []
+    const updatedSemesterList = [];
+    const updatedCourses = [].concat(courses);
+    let updatedPlannedCourses = [];
     for (let i = 0; i < semesters.length; i++) {
       if (semesterNames.indexOf(semesters[i].name) < 0) {
         updatedSemesterList.push(semesters[i]);
-        updatedPlannedCourses = updatedPlannedCourses.concat(semesters[i].courses)
+        updatedPlannedCourses = updatedPlannedCourses.concat(
+          semesters[i].courses
+        );
       } else {
         let k = 0;
         for (let j = 0; j < semesters[i].courses.length; j++) {
@@ -141,30 +142,30 @@ const Course = (): React.ReactNode => {
     setCourses(updatedCourses);
     setPlannedCourses(updatedPlannedCourses);
     setSemesters(updatedSemesterList);
-  }
-  const handleRemoveSemester = (e) => {
-    removeSemester([newSemester])
+  };
+  const handleRemoveSemester = () => {
+    removeSemester([newSemester]);
   };
 
   const addSampleCourses = () => {
-    let updatedSemesters = [].concat(semesters)
-    let updatedCourses = [].concat(courses)
-    let updatedPlannedCourses = [].concat(plannedCourses)
+    const updatedSemesters = [].concat(semesters);
+    const updatedCourses = [].concat(courses);
+    const updatedPlannedCourses = [].concat(plannedCourses);
 
-    const sampleSemesters = Object.keys(samplePlan)
+    const sampleSemesters = Object.keys(samplePlan);
     for (let i = 0; i < sampleSemesters.length; i++) {
       const semesterId = sampleSemesters[i];
       for (let k = 0; k < samplePlan[semesterId].length; k++) {
         const courseId = samplePlan[semesterId][k];
         const courseObj = courses.filter((c) => c.id === courseId)[0];
-        updatedPlannedCourses.push(courseObj)
-        updatedSemesters.map(s => {
+        updatedPlannedCourses.push(courseObj);
+        updatedSemesters.map((s) => {
           if (s.name == semesterId) {
-            s.courses.push(courseObj)
+            s.courses.push(courseObj);
           }
-          return s
-        })
-        updatedCourses.map((c, i) => {
+          return s;
+        });
+        updatedCourses.map((c) => {
           if (c.id == courseId) {
             c.location = semesterId;
           }
@@ -173,39 +174,39 @@ const Course = (): React.ReactNode => {
       }
     }
 
-    setCourses(updatedCourses)
-    setPlannedCourses(updatedPlannedCourses)
-    setSemesters(updatedSemesters)
-  }
+    setCourses(updatedCourses);
+    setPlannedCourses(updatedPlannedCourses);
+    setSemesters(updatedSemesters);
+    setLoadSampleCourses(false);
+  };
 
-  const loadSamplePlan = (e) => {
-    removeSemester(semesters.map(s => s.name))
-    setLoadSampleSemesters(true)
-  }
+  const loadSamplePlan = () => {
+    removeSemester(semesters.map((s) => s.name));
+    setLoadSampleSemesters(true);
+  };
 
   const loadCourses = async () => {
     const res = await fetch(`/api/${majorCode}`);
     const allCourses = await res.json();
     setCourses(allCourses.courses);
     setCourseCategories(allCourses.categories);
-    setMajorName(allCourses.majorName)
-    setSamplePlan(allCourses.samplePlan)
+    setMajorName(allCourses.majorName);
+    setSamplePlan(allCourses.samplePlan);
   };
 
   useEffect(() => {
     if (loadSampleSemesters) {
-      addSemesters(Object.keys(samplePlan))
-      setLoadSampleSemesters(false)
-      setLoadSampleCourses(true)
+      addSemesters(Object.keys(samplePlan));
+      setLoadSampleSemesters(false);
+      setLoadSampleCourses(true);
     }
-  }, [loadSampleSemesters])
+  }, [loadSampleSemesters]);
 
   useEffect(() => {
     if (loadSampleCourses) {
-      addSampleCourses()
-      setLoadSampleCourses(false)
+      addSampleCourses();
     }
-  }, [loadSampleCourses])
+  }, [loadSampleCourses]);
 
   useEffect(() => {
     if (chosenCourse != "") {
@@ -219,7 +220,7 @@ const Course = (): React.ReactNode => {
 
   let tableComponent = <></>;
   let coursesComponent = [];
-  const semestersComponent = semesters.map((sem, i) => {
+  const semestersComponent = semesters.map((sem) => {
     let total_credit_hours = 0;
     coursesComponent = sem.courses.map((c, j) => {
       total_credit_hours += c.credit_hours;
@@ -323,11 +324,23 @@ const Course = (): React.ReactNode => {
                 justifyContent: "right",
               }}
             >
-              <Button variant="success" style={{ borderRadius: "0px" }} onClick={activateAddSemesterModal}>Add/Remove Semesters</Button>
+              <Button
+                variant="success"
+                style={{ borderRadius: "0px" }}
+                onClick={activateAddSemesterModal}
+              >
+                Add/Remove Semesters
+              </Button>
             </Col>
           </Row>
           {semestersComponent}
-          <Button variant="info" style={{ borderRadius: "0px", marginBottom: "3em" }} onClick={loadSamplePlan}>Load Sample Plan</Button>
+          <Button
+            variant="info"
+            style={{ borderRadius: "0px", marginBottom: "3em" }}
+            onClick={loadSamplePlan}
+          >
+            Load Sample Plan
+          </Button>
         </Col>
         <CompletionColumn
           categories={courseCategories}
@@ -346,10 +359,15 @@ const Course = (): React.ReactNode => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4 style={{ margin: "0px" }}>{chosenCourseObj.title}</h4><br/>
-          {chosenCourseObj.description}<br /><br />
+          <h4 style={{ margin: "0px" }}>{chosenCourseObj.title}</h4>
+          <br />
+          {chosenCourseObj.description}
+          <br />
+          <br />
           {chosenCourseObj.prereqDescription}
-          {chosenCourseObj.coreqDescription}<br /><br />
+          {chosenCourseObj.coreqDescription}
+          <br />
+          <br />
           <Form>
             <Form.Group>
               <Form.Label style={{ fontSize: "1.5em" }}>
@@ -362,7 +380,7 @@ const Course = (): React.ReactNode => {
                 style={{ padding: "0px" }}
                 custom
               >
-                {semesters.map((sem, i) => (
+                {semesters.map((sem) => (
                   <option
                     key={`semester-option-${sem.name}`}
                     id={`${sem.name}`}

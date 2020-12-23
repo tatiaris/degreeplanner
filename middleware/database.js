@@ -1,6 +1,6 @@
-import { MongoClient } from 'mongodb';
-import nextConnect from 'next-connect';
-const { MONGODB_URI, MONGODB_DB } = process.env
+import { MongoClient } from "mongodb";
+import nextConnect from "next-connect";
+const { MONGODB_URI, MONGODB_DB } = process.env;
 
 const client = new MongoClient(MONGODB_URI, {
   useNewUrlParser: true,

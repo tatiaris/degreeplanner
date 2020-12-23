@@ -6,13 +6,16 @@ const handler = nextConnect();
 handler.use(middleware);
 
 handler.get(async (req, res) => {
-  let doc = {}
+  let doc = {};
   const pattern = new RegExp(req.query.pattern);
 
   if (pattern) {
-    doc.courses = await req.db.collection("courses").find({ id: pattern }).toArray();
+    doc.courses = await req.db
+      .collection("courses")
+      .find({ id: pattern })
+      .toArray();
   }
-  
+
   if (doc == null) {
     doc = {};
   }
@@ -23,11 +26,11 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
   let data = req.body;
   data = JSON.parse(data);
-  let doc = await req.db.collection("courses").insertOne(data);
+  await req.db.collection("courses").insertOne(data);
   console.log("inserted data", data);
   res.json({
     message: "success",
-    data: data
+    data: data,
   });
 });
 

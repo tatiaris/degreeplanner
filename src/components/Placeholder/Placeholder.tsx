@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 import { PlaceHolderProps } from "../interfaces";
 import PropTypes from "prop-types";
-import { Placeholder, Segment } from 'semantic-ui-react'
+import { Placeholder, Segment } from "semantic-ui-react";
 
 export const PlaceHolder: React.FC<PlaceHolderProps> = (props) => {
   let placeHolder = (
@@ -18,18 +18,14 @@ export const PlaceHolder: React.FC<PlaceHolderProps> = (props) => {
         </Placeholder.Paragraph>
       </Placeholder>
     </Segment>
-  )
+  );
   if (!props.show) {
-    placeHolder = <></>
+    placeHolder = <></>;
   }
 
-  return (
-    <>
-      {placeHolder}
-    </>
-  );
+  return <>{placeHolder}</>;
 };
 
 PlaceHolder.propTypes = {
-  show: PropTypes.bool
+  show: PropTypes.bool,
 };

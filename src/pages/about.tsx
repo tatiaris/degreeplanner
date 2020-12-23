@@ -6,9 +6,9 @@ import { Mnavbar } from "../components/Mnavbar/";
 const About = (): React.ReactNode => {
   return (
     <>
-        <Mheader title={"About"}/>
-        <Mnavbar theme={"dark"}/>
-        <MFooter/>
+      <Mheader title={"About"} />
+      <Mnavbar theme={"dark"} />
+      <MFooter />
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { MnavbarProps } from "../interfaces";
 import PropTypes from "prop-types";
-import { Navbar, Nav, Form, FormControl, Button, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
 /**
  * Mnavbar component
@@ -9,7 +9,13 @@ import { Navbar, Nav, Form, FormControl, Button, NavDropdown } from "react-boots
 export const Mnavbar: React.FC<MnavbarProps> = (props) => {
   return (
     <>
-      <Navbar style={{ backgroundColor: "#25282d !important" }} collapseOnSelect expand="lg" bg={props.theme} variant={props.theme}>
+      <Navbar
+        style={{ backgroundColor: "#25282d !important" }}
+        collapseOnSelect
+        expand="lg"
+        bg={props.theme}
+        variant={props.theme}
+      >
         <Navbar.Brand href="/">Aggie Degree Planner</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
