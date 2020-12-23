@@ -1,7 +1,7 @@
-import React from "react";
-import { PlaceHolderProps } from "../interfaces";
-import PropTypes from "prop-types";
-import { Placeholder, Segment } from "semantic-ui-react";
+import React from 'react';
+import { PlaceHolderProps } from '../interfaces';
+import PropTypes from 'prop-types';
+import { Placeholder, Segment } from 'semantic-ui-react';
 
 export const PlaceHolder: React.FC<PlaceHolderProps> = (props) => {
   let placeHolder = (
@@ -27,5 +27,5 @@ export const PlaceHolder: React.FC<PlaceHolderProps> = (props) => {
 };
 
 PlaceHolder.propTypes = {
-  show: PropTypes.bool,
+  show: PropTypes.bool
 };

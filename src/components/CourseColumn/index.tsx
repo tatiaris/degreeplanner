@@ -1,1 +1,1 @@
-export * from "./CourseColumn";
+export * from './CourseColumn';

@@ -1,1 +1,1 @@
-export * from "./CollapsibleBtns";
+export * from './CollapsibleBtns';

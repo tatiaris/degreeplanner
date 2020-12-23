@@ -1,1 +1,1 @@
-export * from "./CompletionColumn";
+export * from './CompletionColumn';

@@ -1,1 +1,1 @@
-export * from "./MFooter";
+export * from './MFooter';

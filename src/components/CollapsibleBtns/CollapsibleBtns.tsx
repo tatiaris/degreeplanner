@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { CollapsibleBtnsProps } from "../interfaces";
-import { Button, ProgressBar } from "react-bootstrap";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { CollapsibleBtnsProps } from '../interfaces';
+import { Button, ProgressBar } from 'react-bootstrap';
 
 /**
  * Collapsible Buttons Component
  */
 export const CollapsibleBtns: React.FC<CollapsibleBtnsProps> = (props) => {
-  const bootVariant = props.opposite ? "primary" : "danger";
-  const cellColor = props.opposite ? "#3a99ff" : "#dd5c68";
+  const bootVariant = props.opposite ? 'primary' : 'danger';
+  const cellColor = props.opposite ? '#3a99ff' : '#dd5c68';
   const [collapse, setCollapse] = useState(true);
   const options = props.courseList;
 
@@ -19,10 +19,7 @@ export const CollapsibleBtns: React.FC<CollapsibleBtnsProps> = (props) => {
   let optionsComponent = [];
   if (options.length > 0 && !collapse) {
     optionsComponent = options.map((o) => {
-      if (
-        o.location == props.courseType ||
-        (props.opposite && o.type == props.courseType)
-      ) {
+      if (o.location == props.courseType || (props.opposite && o.type == props.courseType)) {
         return (
           <Button
             key={`course-btn-${o.id}`}
@@ -30,16 +27,13 @@ export const CollapsibleBtns: React.FC<CollapsibleBtnsProps> = (props) => {
             variant={bootVariant}
             onClick={handleCourseBtnClick}
             style={{
-              width: "100%",
-              borderRadius: "0px",
-              textAlign: "left",
-              background: `${cellColor}`,
-            }}
-          >
+              width: '100%',
+              borderRadius: '0px',
+              textAlign: 'left',
+              background: `${cellColor}`
+            }}>
             {o.name}
-            <span style={{ float: "right", fontWeight: "bold" }}>
-              {o.credit_hours}
-            </span>
+            <span style={{ float: 'right', fontWeight: 'bold' }}>{o.credit_hours}</span>
           </Button>
         );
       }
@@ -50,7 +44,7 @@ export const CollapsibleBtns: React.FC<CollapsibleBtnsProps> = (props) => {
     setCollapse(!collapse);
   };
 
-  const collapseSymbol = collapse ? ">" : "v";
+  const collapseSymbol = collapse ? '>' : 'v';
 
   let progress = 0;
   let progressComponent = <></>;
@@ -68,27 +62,18 @@ export const CollapsibleBtns: React.FC<CollapsibleBtnsProps> = (props) => {
     );
     progress = Math.round((progress * 100) / props.reqAmount);
     progressComponent = (
-      <ProgressBar
-        striped
-        variant="success"
-        style={{ height: "2em" }}
-        now={progress}
-        label={`${progress}%`}
-      />
+      <ProgressBar striped variant="success" style={{ height: '2em' }} now={progress} label={`${progress}%`} />
     );
   }
 
   return (
     <>
       <Button
-        style={{ width: "100%", borderRadius: "0px", textAlign: "left" }}
+        style={{ width: '100%', borderRadius: '0px', textAlign: 'left' }}
         variant={bootVariant}
-        onClick={handleCollapseBtn}
-      >
+        onClick={handleCollapseBtn}>
         {props.courseType} {progressCount}
-        <span style={{ float: "right", fontWeight: "bold" }}>
-          {collapseSymbol}
-        </span>
+        <span style={{ float: 'right', fontWeight: 'bold' }}>{collapseSymbol}</span>
       </Button>
       {progressComponent}
       {optionsComponent}
@@ -100,5 +85,5 @@ CollapsibleBtns.propTypes = {
   courseType: PropTypes.string,
   courseList: PropTypes.any,
   activateModal: PropTypes.any,
-  reqAmount: PropTypes.number,
+  reqAmount: PropTypes.number
 };

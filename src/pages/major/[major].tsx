@@ -1,37 +1,37 @@
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { Mheader } from "../../components/Mheader";
-import { Mnavbar } from "../../components/Mnavbar";
-import { MFooter } from "../../components/MFooter";
-import { Col, Row, Button, Modal, Form, Table } from "react-bootstrap";
-import { CourseColumn } from "../../components/CourseColumn";
-import { CompletionColumn } from "../../components/CompletionColumn";
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { Mheader } from '../../components/Mheader';
+import { Mnavbar } from '../../components/Mnavbar';
+import { MFooter } from '../../components/MFooter';
+import { Col, Row, Button, Modal, Form, Table } from 'react-bootstrap';
+import { CourseColumn } from '../../components/CourseColumn';
+import { CompletionColumn } from '../../components/CompletionColumn';
 
 const Course = (): React.ReactNode => {
   const router = useRouter();
   const majorCode = router.query.major;
-  const [majorName, setMajorName] = useState("");
+  const [majorName, setMajorName] = useState('');
   const [courses, setCourses] = useState([]);
   const [samplePlan, setSamplePlan] = useState({});
   const [chosenCourseObj, setChosenCourseObj] = useState({
-    id: "",
-    name: "",
-    title: "",
-    department: "",
+    id: '',
+    name: '',
+    title: '',
+    department: '',
     course_num: 0,
     credit_hours: 0,
-    description: "",
-    prereqDescription: "",
-    coreqDescription: "",
+    description: '',
+    prereqDescription: '',
+    coreqDescription: ''
   });
   const [courseCategories, setCourseCategories] = useState({});
   const [plannedCourses, setPlannedCourses] = useState([]);
   const [semesters, setSemesters] = useState([
-    { name: "Pre-acquired credits", courses: [] },
-    { name: "1st Semester", courses: [] },
+    { name: 'Pre-acquired credits', courses: [] },
+    { name: '1st Semester', courses: [] }
   ]);
-  const [chosenCourse, setChosenCourse] = useState("");
-  const [chosenSemester, setChosenSemester] = useState("");
+  const [chosenCourse, setChosenCourse] = useState('');
+  const [chosenSemester, setChosenSemester] = useState('');
   const [loadSampleSemesters, setLoadSampleSemesters] = useState(false);
   const [loadSampleCourses, setLoadSampleCourses] = useState(false);
 
@@ -42,7 +42,7 @@ const Course = (): React.ReactNode => {
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
-  const handleCourseClick = (course = "nothing") => {
+  const handleCourseClick = (course = 'nothing') => {
     setChosenCourse(course);
     setShow(true);
   };
@@ -50,7 +50,7 @@ const Course = (): React.ReactNode => {
     handleCourseClick(e.target.name);
   };
   const handleRemoveCourse = () => {
-    let prevLocation = "";
+    let prevLocation = '';
     const coursesCopy = courses.map((c) => {
       if (c.id == chosenCourse) {
         prevLocation = c.location;
@@ -74,7 +74,7 @@ const Course = (): React.ReactNode => {
     setShow(false);
   };
   const moveCourse = (courseId, semesterId) => {
-    let prevLocation = "";
+    let prevLocation = '';
     const allCoursesCopy = courses.map((c) => {
       if (c.id == courseId) {
         prevLocation = c.location;
@@ -106,7 +106,7 @@ const Course = (): React.ReactNode => {
     moveCourse(chosenCourse, chosenSemester);
     setShow(false);
   };
-  const [newSemester, setNewSemester] = useState("");
+  const [newSemester, setNewSemester] = useState('');
   const [showSemesterModal, setShowSemesterModal] = useState(false);
   const activateAddSemesterModal = () => setShowSemesterModal(true);
   const handleCloseSemesterModal = () => setShowSemesterModal(false);
@@ -128,9 +128,7 @@ const Course = (): React.ReactNode => {
     for (let i = 0; i < semesters.length; i++) {
       if (semesterNames.indexOf(semesters[i].name) < 0) {
         updatedSemesterList.push(semesters[i]);
-        updatedPlannedCourses = updatedPlannedCourses.concat(
-          semesters[i].courses
-        );
+        updatedPlannedCourses = updatedPlannedCourses.concat(semesters[i].courses);
       } else {
         let k = 0;
         for (let j = 0; j < semesters[i].courses.length; j++) {
@@ -209,7 +207,7 @@ const Course = (): React.ReactNode => {
   }, [loadSampleCourses]);
 
   useEffect(() => {
-    if (chosenCourse != "") {
+    if (chosenCourse != '') {
       setChosenCourseObj(courses.filter((c) => c.id === chosenCourse)[0]);
     }
   }, [chosenCourse]);
@@ -230,14 +228,13 @@ const Course = (): React.ReactNode => {
           <td>{c.department}</td>
           <td>{c.course_num}</td>
           <td>{c.credit_hours}</td>
-          <td style={{ padding: "0px" }}>
+          <td style={{ padding: '0px' }}>
             <Button
               key={`course-btn-${c.id}`}
               onClick={handleTableCourseClick}
               name={c.id}
               variant="danger"
-              style={{ width: "100%", height: "50px", borderRadius: "0px" }}
-            >
+              style={{ width: '100%', height: '50px', borderRadius: '0px' }}>
               &#8942;
             </Button>
           </td>
@@ -250,22 +247,17 @@ const Course = (): React.ReactNode => {
         hover
         variant="dark"
         style={{
-          marginTop: "1em",
-          marginBottom: "3em",
-          background: "#2a2e33",
-        }}
-      >
+          marginTop: '1em',
+          marginBottom: '3em',
+          background: '#2a2e33'
+        }}>
         <thead>
-          <tr style={{ background: "#1c1f22" }}>
-            <th style={{ border: "none", width: "200px" }} colSpan={2}>
+          <tr style={{ background: '#1c1f22' }}>
+            <th style={{ border: 'none', width: '200px' }} colSpan={2}>
               {sem.name}
             </th>
-            <th style={{ border: "none" }}>
-              Courses Planned: {sem.courses.length}
-            </th>
-            <th style={{ border: "none" }}>
-              Total Credit Hours: {total_credit_hours}
-            </th>
+            <th style={{ border: 'none' }}>Courses Planned: {sem.courses.length}</th>
+            <th style={{ border: 'none' }}>Total Credit Hours: {total_credit_hours}</th>
             <th></th>
           </tr>
           <tr>
@@ -285,8 +277,8 @@ const Course = (): React.ReactNode => {
   return (
     <>
       <Mheader title={`${majorName}`} />
-      <Mnavbar theme={"dark"} />
-      <Row id="page_container" style={{ margin: "0px" }}>
+      <Mnavbar theme={'dark'} />
+      <Row id="page_container" style={{ margin: '0px' }}>
         <CourseColumn
           categories={courseCategories}
           handleCourseClick={handleCourseClick}
@@ -296,49 +288,36 @@ const Course = (): React.ReactNode => {
         <Col
           sm="7"
           style={{
-            background: "#343a40",
-            paddingTop: "1em",
-            overflow: "scroll",
-            height: "100%",
-          }}
-        >
-          <Row
-            style={{ margin: "0px", display: "flex", justifyContent: "right" }}
-          >
+            background: '#343a40',
+            paddingTop: '1em',
+            overflow: 'scroll',
+            height: '100%'
+          }}>
+          <Row style={{ margin: '0px', display: 'flex', justifyContent: 'right' }}>
             <Col
               sm="9"
               style={{
-                padding: "0",
-                fontSize: "2em",
-                color: "white",
-                fontWeight: "bold",
-              }}
-            >
+                padding: '0',
+                fontSize: '2em',
+                color: 'white',
+                fontWeight: 'bold'
+              }}>
               {majorName}
             </Col>
             <Col
               sm="3"
               style={{
-                padding: "0px",
-                display: "flex",
-                justifyContent: "right",
-              }}
-            >
-              <Button
-                variant="success"
-                style={{ borderRadius: "0px" }}
-                onClick={activateAddSemesterModal}
-              >
+                padding: '0px',
+                display: 'flex',
+                justifyContent: 'right'
+              }}>
+              <Button variant="success" style={{ borderRadius: '0px' }} onClick={activateAddSemesterModal}>
                 Add/Remove Semesters
               </Button>
             </Col>
           </Row>
           {semestersComponent}
-          <Button
-            variant="info"
-            style={{ borderRadius: "0px", marginBottom: "3em" }}
-            onClick={loadSamplePlan}
-          >
+          <Button variant="info" style={{ borderRadius: '0px', marginBottom: '3em' }} onClick={loadSamplePlan}>
             Load Sample Plan
           </Button>
         </Col>
@@ -352,14 +331,11 @@ const Course = (): React.ReactNode => {
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {chosenCourseObj.name}{" "}
-            <span style={{ color: "#6c757d" }}>
-              [{chosenCourseObj.credit_hours}]
-            </span>
+            {chosenCourseObj.name} <span style={{ color: '#6c757d' }}>[{chosenCourseObj.credit_hours}]</span>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4 style={{ margin: "0px" }}>{chosenCourseObj.title}</h4>
+          <h4 style={{ margin: '0px' }}>{chosenCourseObj.title}</h4>
           <br />
           {chosenCourseObj.description}
           <br />
@@ -370,26 +346,22 @@ const Course = (): React.ReactNode => {
           <br />
           <Form>
             <Form.Group>
-              <Form.Label style={{ fontSize: "1.5em" }}>
-                Choose a semester:
-              </Form.Label>
+              <Form.Label style={{ fontSize: '1.5em' }}>Choose a semester:</Form.Label>
               <Form.Control
                 onChange={(e) => setChosenSemester(e.target.value)}
                 as="select"
                 htmlSize={semesters.length}
-                style={{ padding: "0px" }}
-                custom
-              >
+                style={{ padding: '0px' }}
+                custom>
                 {semesters.map((sem) => (
                   <option
                     key={`semester-option-${sem.name}`}
                     id={`${sem.name}`}
                     style={{
-                      textAlign: "center",
-                      fontSize: "1.5em",
-                      borderBottom: "1px solid white",
-                    }}
-                  >
+                      textAlign: 'center',
+                      fontSize: '1.5em',
+                      borderBottom: '1px solid white'
+                    }}>
                     {sem.name}
                   </option>
                 ))}
@@ -415,9 +387,7 @@ const Course = (): React.ReactNode => {
         </Modal.Header>
         <Modal.Body>
           <Form.Group>
-            <Form.Label style={{ fontSize: "1.5em" }}>
-              Enter semester name:
-            </Form.Label>
+            <Form.Label style={{ fontSize: '1.5em' }}>Enter semester name:</Form.Label>
             <Form.Control
               name="new-semester"
               onChange={(e) => setNewSemester(e.target.value)}

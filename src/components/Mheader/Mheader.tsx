@@ -1,7 +1,7 @@
-import React from "react";
-import Head from "next/head";
-import { MheaderProps } from "../interfaces";
-import PropTypes from "prop-types";
+import React from 'react';
+import Head from 'next/head';
+import { MheaderProps } from '../interfaces';
+import PropTypes from 'prop-types';
 
 /**
  * Mheader component
@@ -18,5 +18,5 @@ export const Mheader: React.FC<MheaderProps> = (props) => {
 };
 
 Mheader.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };

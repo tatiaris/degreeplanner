@@ -1,5 +1,5 @@
-import nextConnect from "next-connect";
-import middleware from "../../../middleware/database";
+import nextConnect from 'next-connect';
+import middleware from '../../../middleware/database';
 
 const handler = nextConnect();
 
@@ -10,10 +10,7 @@ handler.get(async (req, res) => {
   const pattern = new RegExp(req.query.pattern);
 
   if (pattern) {
-    doc.courses = await req.db
-      .collection("courses")
-      .find({ id: pattern })
-      .toArray();
+    doc.courses = await req.db.collection('courses').find({ id: pattern }).toArray();
   }
 
   if (doc == null) {
@@ -26,11 +23,11 @@ handler.get(async (req, res) => {
 handler.post(async (req, res) => {
   let data = req.body;
   data = JSON.parse(data);
-  await req.db.collection("courses").insertOne(data);
-  console.log("inserted data", data);
+  await req.db.collection('courses').insertOne(data);
+  console.log('inserted data', data);
   res.json({
-    message: "success",
-    data: data,
+    message: 'success',
+    data: data
   });
 });
 

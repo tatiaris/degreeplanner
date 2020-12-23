@@ -3,7 +3,7 @@ export interface MheaderProps {
 }
 
 export interface MnavbarProps {
-  theme: "light" | "dark";
+  theme: 'light' | 'dark';
 }
 export interface Course {
   id: string;

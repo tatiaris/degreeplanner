@@ -1,1 +1,1 @@
-export * from "./Mnavbar";
+export * from './Mnavbar';

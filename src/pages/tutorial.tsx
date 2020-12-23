@@ -1,13 +1,13 @@
-import React from "react";
-import { MFooter } from "../components/MFooter";
-import { Mheader } from "../components/Mheader/";
-import { Mnavbar } from "../components/Mnavbar/";
+import React from 'react';
+import { MFooter } from '../components/MFooter';
+import { Mheader } from '../components/Mheader/';
+import { Mnavbar } from '../components/Mnavbar/';
 
 const Tutorial = (): React.ReactNode => {
   return (
     <>
-      <Mheader title={"Tutorial"} />
-      <Mnavbar theme={"dark"} />
+      <Mheader title={'Tutorial'} />
+      <Mnavbar theme={'dark'} />
       <MFooter />
     </>
   );
