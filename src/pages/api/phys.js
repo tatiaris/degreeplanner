@@ -75,18 +75,18 @@ handler.get(async (req, res) => {
     if (category != 'Other') courseCategories.Other.courses += courseCategories[category].courses + '|';
     else courseCategories.Other.courses = courseCategories.Other.courses.slice(0, -1) + ')))';
 
-    await fetch(`${BASE_URL}/api/courses?pattern=${courseCategories[category].courses}`, {
-      method: 'get'
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        data.courses.map((d) => {
-          d.type = category;
-          d.location = category;
-        });
-        applicableCourses = applicableCourses.concat(data.courses);
-      })
-      .catch((e) => console.log(e));
+    let doc = {};
+    const pattern = new RegExp(courseCategories[category].courses);
+    doc.courses = await req.db.collection('courses').find({ id: pattern }).toArray();
+
+    if (doc.courses) {
+      doc.courses.map((d) => {
+        d.type = category;
+        d.location = category;
+        d.planned = false;
+      });
+      applicableCourses = applicableCourses.concat(doc.courses);
+    }
   }
 
   res.json({

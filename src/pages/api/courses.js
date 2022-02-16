@@ -6,16 +6,17 @@ const handler = nextConnect();
 handler.use(middleware);
 
 handler.get(async (req, res) => {
+  console.log('here');
   let doc = {};
-  const pattern = new RegExp(req.query.pattern);
+  // const pattern = new RegExp(req.query.pattern);
 
-  if (pattern) {
-    doc.courses = await req.db.collection('courses').find({ id: pattern }).toArray();
-  }
+  // if (pattern) {
+  //   doc.courses = await req.db.collection('courses').find({ id: pattern }).toArray();
+  // }
 
-  if (doc == null) {
-    doc = {};
-  }
+  // if (doc == null) {
+  //   doc = {};
+  // }
 
   res.json(doc);
 });

@@ -70,15 +70,19 @@ handler.get(async (req, res) => {
     if (category != 'Other') courseCategories.Other.courses += courseCategories[category].courses + '|';
     else courseCategories.Other.courses = courseCategories.Other.courses.slice(0, -1) + ')))';
 
-    let courses = await req.db
-      .collection('courses')
-      .find({ id: RegExp(courseCategories[category].courses) })
-      .toArray();
-    courses.map((d) => {
-      d.type = category;
-      d.location = category;
-    });
-    applicableCourses = applicableCourses.concat(courses);
+    let doc = {};
+    const pattern = new RegExp(courseCategories[category].courses);
+
+    doc.courses = await req.db.collection('courses').find({ id: pattern }).toArray();
+
+    if (doc.courses) {
+      doc.courses.map((d) => {
+        d.type = category;
+        d.location = category;
+        d.planned = false;
+      });
+      applicableCourses = applicableCourses.concat(doc.courses);
+    }
   }
 
   res.json({

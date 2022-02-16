@@ -1,6 +1,5 @@
 import nextConnect from 'next-connect';
 import middleware from '../../../middleware/database';
-const { BASE_URL } = process.env;
 
 const handler = nextConnect();
 
@@ -74,22 +73,16 @@ handler.get(async (req, res) => {
 
     let doc = {};
     const pattern = new RegExp(courseCategories[category].courses);
-  
-    if (pattern) {
-      doc.courses = await req.db.collection('courses').find({ id: pattern }).toArray();
-    }
-  
-    if (doc == null) {
-      doc = {};
-    }
+
+    doc.courses = await req.db.collection('courses').find({ id: pattern }).toArray();
 
     if (doc.courses) {
       doc.courses.map((d) => {
         d.type = category;
         d.location = category;
         d.planned = false;
-      })
-      applicableCourses = applicableCourses.concat(data.courses);
+      });
+      applicableCourses = applicableCourses.concat(doc.courses);
     }
   }
 
